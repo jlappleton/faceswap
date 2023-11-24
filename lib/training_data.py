@@ -4,7 +4,6 @@
 import logging
 
 from functools import partial
-from random import shuffle, choice
 from zlib import decompress
 
 import numpy as np
@@ -14,6 +13,7 @@ from scipy.interpolate import griddata
 from lib.image import batch_convert_color, read_image_batch
 from lib.multithreading import BackgroundGenerator
 from lib.utils import FaceswapError
+import secrets
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -191,7 +191,7 @@ class TrainingDataGenerator():  # pylint:disable=too-few-public-methods
         def _img_iter(imgs):
             while True:
                 if do_shuffle:
-                    shuffle(imgs)
+                    secrets.SystemRandom().shuffle(imgs)
                 for img in imgs:
                     yield img
 
@@ -397,7 +397,7 @@ class TrainingDataGenerator():  # pylint:disable=too-few-public-methods
         if None in closest_hashes:
             closest_hashes = self._cache_closest_hashes(filenames, batch_src_points, landmarks)
 
-        batch_dst_points = np.array([landmarks[choice(hsh)] for hsh in closest_hashes])
+        batch_dst_points = np.array([landmarks[secrets.SystemRandom().choice(hsh)] for hsh in closest_hashes])
         logger.trace("Returning: (batch_dst_points: %s)", batch_dst_points.shape)
         return batch_dst_points
 
