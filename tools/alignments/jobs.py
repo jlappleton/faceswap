@@ -573,7 +573,7 @@ class Merge():
         self._hashes_to_frame = self.final_alignments.hashes_to_frame
         skip_count = 0
         merge_count = 0
-        total_count = sum([alignments.frames_count for alignments in self.process_alignments])
+        total_count = sum(alignments.frames_count for alignments in self.process_alignments)
 
         with tqdm(desc="Merging Alignments", total=total_count) as pbar:
             for alignments in self.process_alignments:

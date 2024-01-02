@@ -536,7 +536,7 @@ class Images():
         if not retval:
             logger.debug("No new images in output folder")
         else:
-            self._previewcache["modified"] = max([os.path.getmtime(img) for img in retval])
+            self._previewcache["modified"] = max(os.path.getmtime(img) for img in retval)
             logger.debug("Number new images: %s, Last Modified: %s",
                          len(retval), self._previewcache["modified"])
         return retval

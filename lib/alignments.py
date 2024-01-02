@@ -385,10 +385,10 @@ class Alignments():
             ``True`` if all faces in the current alignments possess the given ``mask_type``
             otherwise ``False``
         """
-        retval = any([(face.get("mask", None) is not None and
+        retval = any((face.get("mask", None) is not None and
                        face["mask"].get(mask_type, None) is not None)
                       for val in self._data.values()
-                      for face in val["faces"]])
+                      for face in val["faces"])
         logger.debug(retval)
         return retval
 

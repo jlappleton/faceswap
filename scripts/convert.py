@@ -284,7 +284,7 @@ class DiskIO():
     def _total_count(self):
         """ int: The total number of frames to be converted """
         if self._frame_ranges and not self._args.keep_unchanged:
-            retval = sum([fr[1] - fr[0] + 1 for fr in self._frame_ranges])
+            retval = sum(fr[1] - fr[0] + 1 for fr in self._frame_ranges)
         else:
             retval = self._images.count
         logger.debug(retval)

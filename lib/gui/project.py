@@ -684,7 +684,7 @@ class Project(_GuiSession):
     @property
     def _project_modified(self):
         """bool: ``True`` if the project has been modified otherwise ``False``. """
-        return any([var.get() for var in self._modified_vars.values()])
+        return any(var.get() for var in self._modified_vars.values())
 
     @property
     def _tasks(self):

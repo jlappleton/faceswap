@@ -187,8 +187,8 @@ def get_image_paths(directory):
     logger.trace("Scanned Folder Contents: %s", dir_scanned)
 
     for chkfile in dir_scanned:
-        if any([chkfile.name.lower().endswith(ext)
-                for ext in image_extensions]):
+        if any(chkfile.name.lower().endswith(ext)
+                for ext in image_extensions):
             logger.trace("Adding '%s' to image list", chkfile.path)
             dir_contents.append(chkfile.path)
 

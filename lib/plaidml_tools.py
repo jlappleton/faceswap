@@ -244,11 +244,11 @@ class PlaidMLStats():
             _LOGGER.error("Failed to automatically detect your GPU.")
             _LOGGER.error("Please run `plaidml-setup` to set up your GPU.")
             sys.exit(1)
-        max_vram = max([self.vram[idx] for idx in indices])
+        max_vram = max(self.vram[idx] for idx in indices)
         if _LOGGER:
             _LOGGER.debug("Max VRAM: %s", max_vram)
-        gpu_idx = min([idx for idx, vram in enumerate(self.vram)
-                       if vram == max_vram and idx in indices])
+        gpu_idx = min(idx for idx, vram in enumerate(self.vram)
+                       if vram == max_vram and idx in indices)
         if _LOGGER:
             _LOGGER.debug("GPU IDX: %s", gpu_idx)
 

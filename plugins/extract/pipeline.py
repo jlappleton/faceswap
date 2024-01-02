@@ -571,15 +571,15 @@ class Extractor():
         if get_backend() != "nvidia":
             logger.debug("Backend is not Nvidia. Not updating batchsize requirements")
             return
-        if sum([plugin.vram for plugin in self._active_plugins]) == 0:
+        if sum(plugin.vram for plugin in self._active_plugins) == 0:
             logger.debug("No plugins use VRAM. Not updating batchsize requirements.")
             return
 
-        batch_required = sum([plugin.vram_per_batch * plugin.batchsize
-                              for plugin in self._active_plugins])
+        batch_required = sum(plugin.vram_per_batch * plugin.batchsize
+                              for plugin in self._active_plugins)
         gpu_plugins = [p for p in self._current_phase if self._vram_per_phase[p] > 0]
-        plugins_required = sum([self._vram_per_phase[p]
-                                for p in gpu_plugins]) * self._parallel_scaling[len(gpu_plugins)]
+        plugins_required = sum(self._vram_per_phase[p]
+                                for p in gpu_plugins) * self._parallel_scaling[len(gpu_plugins)]
         if plugins_required + batch_required <= self._vram_stats["vram_free"]:
             logger.debug("Plugin requirements within threshold: (plugins_required: %sMB, "
                          "vram_free: %sMB)", plugins_required, self._vram_stats["vram_free"])
