@@ -96,7 +96,7 @@ class _SysInfo():
     def _installed_pip(self):
         """ str: The list of installed pip packages within Faceswap's scope. """
         pip = Popen("{} -m pip freeze".format(sys.executable),
-                    shell=True, stdout=PIPE)
+                    shell=False, stdout=PIPE)
         installed = pip.communicate()[0].decode().splitlines()
         return "\n".join(installed)
 
@@ -105,7 +105,7 @@ class _SysInfo():
         """ str: The list of installed Conda packages within Faceswap's scope. """
         if not self._is_conda:
             return None
-        conda = Popen("conda list", shell=True, stdout=PIPE, stderr=PIPE)
+        conda = Popen("conda list", shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = conda.communicate()
         if stderr:
             return "Could not get package list"
@@ -117,7 +117,7 @@ class _SysInfo():
         """ str: The installed version of Conda, or `N/A` if Conda is not installed. """
         if not self._is_conda:
             return "N/A"
-        conda = Popen("conda --version", shell=True, stdout=PIPE, stderr=PIPE)
+        conda = Popen("conda --version", shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = conda.communicate()
         if stderr:
             return "Conda is used, but version not found"
@@ -127,7 +127,7 @@ class _SysInfo():
     @property
     def _git_branch(self):
         """ str: The git branch that is currently being used to execute Faceswap. """
-        git = Popen("git status", shell=True, stdout=PIPE, stderr=PIPE)
+        git = Popen("git status", shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = git.communicate()
         if stderr:
             return "Not Found"
@@ -138,7 +138,7 @@ class _SysInfo():
     def _git_commits(self):
         """ str: The last 5 git commits for the currently running Faceswap. """
         git = Popen("git log --pretty=oneline --abbrev-commit -n 5",
-                    shell=True, stdout=PIPE, stderr=PIPE)
+                    shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = git.communicate()
         if stderr:
             return "Not Found"
@@ -154,7 +154,7 @@ class _SysInfo():
     def _cuda_version(self):
         """ str: The installed CUDA version. """
         # TODO Handle multiple CUDA installs
-        chk = Popen("nvcc -V", shell=True, stdout=PIPE, stderr=PIPE)
+        chk = Popen("nvcc -V", shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = chk.communicate()
         if not stderr:
             version = re.search(r".*release (?P<cuda>\d+\.\d+)", stdout.decode(self._encoding))

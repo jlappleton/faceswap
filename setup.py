@@ -214,7 +214,7 @@ class Environment():
         """ Get currently installed packages """
         installed_packages = dict()
         chk = Popen("\"{}\" -m pip freeze".format(sys.executable),
-                    shell=True, stdout=PIPE)
+                    shell=False, stdout=PIPE)
         installed = chk.communicate()[0].decode(self.encoding).splitlines()
 
         for pkg in installed:
@@ -439,7 +439,7 @@ class Checks():
 
     def cuda_check(self):
         """ Check Cuda for Linux or Windows """
-        chk = Popen("nvcc -V", shell=True, stdout=PIPE, stderr=PIPE)
+        chk = Popen("nvcc -V", shell=False, stdout=PIPE, stderr=PIPE)
         stdout, stderr = chk.communicate()
         if not stderr:
             version = re.search(r".*release (?P<cuda>\d+\.\d+)", stdout.decode(self.env.encoding))
@@ -716,7 +716,7 @@ class Install():
         condaexe = ["conda", "search"]
         pkgs = ["cudatoolkit", "cudnn"]
         for pkg in pkgs:
-            chk = Popen(condaexe + [pkg], shell=True, stdout=PIPE)
+            chk = Popen(condaexe + [pkg], shell=False, stdout=PIPE)
             available = [line.split()
                          for line in chk.communicate()[0].decode(self.env.encoding).splitlines()
                          if line.startswith(pkg)]
