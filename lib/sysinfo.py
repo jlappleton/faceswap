@@ -96,7 +96,7 @@ class _SysInfo():
     def _installed_pip(self):
         """ str: The list of installed pip packages within Faceswap's scope. """
         pip = Popen("{} -m pip freeze".format(sys.executable),
-                    shell=True, stdout=PIPE)
+                    shell=False, stdout=PIPE)
         installed = pip.communicate()[0].decode().splitlines()
         return "\n".join(installed)
 
