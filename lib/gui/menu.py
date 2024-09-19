@@ -18,6 +18,7 @@ import update_deps
 from .popup_configure import open_popup
 from .custom_widgets import Tooltip
 from .utils import get_config, get_images
+from security import safe_command
 
 _RESOURCES = [("faceswap.dev - Guides and Forum", "https://www.faceswap.dev"),
               ("Patreon - Support this project", "https://www.patreon.com/faceswap"),
@@ -302,7 +303,7 @@ class HelpMenu(tk.Menu):  # pylint:disable=too-many-ancestors
         """
         logger.info("Switching branch to '%s'...", branch)
         gitcmd = "git checkout {}".format(branch)
-        cmd = Popen(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
+        cmd = safe_command.run(Popen, gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
         stdout, _ = cmd.communicate()
         retcode = cmd.poll()
         if retcode != 0:
