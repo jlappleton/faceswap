@@ -20,6 +20,7 @@ from tqdm import tqdm
 from lib.multithreading import MultiThread
 from lib.queue_manager import queue_manager, QueueEmpty
 from lib.utils import convert_to_secs, FaceswapError, _video_extensions, get_image_paths
+from security import safe_command
 
 logger = logging.getLogger(__name__)  # pylint:disable=invalid-name
 
@@ -70,7 +71,7 @@ class FfmpegReader(imageio.plugins.ffmpeg.FfmpegFormat.Reader):
                "-f", "null",
                "-"]
         logger.debug("FFMPEG Command: '%s'", " ".join(cmd))
-        process = subprocess.Popen(cmd,
+        process = safe_command.run(subprocess.Popen, cmd,
                                    stderr=subprocess.STDOUT,
                                    stdout=subprocess.PIPE,
                                    universal_newlines=True)
@@ -573,7 +574,7 @@ def count_frames(filename, fast=False):
     cmd.extend(["-f", "null", "-"])
 
     logger.debug("FFMPEG Command: '%s'", " ".join(cmd))
-    process = subprocess.Popen(cmd,
+    process = safe_command.run(subprocess.Popen, cmd,
                                stderr=subprocess.STDOUT,
                                stdout=subprocess.PIPE,
                                universal_newlines=True)
