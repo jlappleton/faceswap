@@ -2,7 +2,6 @@
 """ Tool to preview swaps and tweak configuration prior to running a convert """
 
 import logging
-import random
 import tkinter as tk
 from tkinter import ttk
 import os
@@ -30,6 +29,7 @@ from scripts.convert import Predict
 
 from plugins.plugin_loader import PluginLoader
 from plugins.convert._config import Config
+import secrets
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -226,7 +226,7 @@ class Samples():
     @property
     def _random_choice(self):
         """ list: Random indices from the :attr:`_indices` group """
-        retval = [random.choice(indices) for indices in self._indices]
+        retval = [secrets.choice(indices) for indices in self._indices]
         logger.debug(retval)
         return retval
 
