@@ -249,7 +249,7 @@ class HelpMenu(tk.Menu):  # pylint:disable=too-many-ancestors
             error then `None` is returned
         """
         gitcmd = "git branch -a"
-        cmd = Popen(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
+        cmd = Popen(gitcmd, shell=False, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
         stdout, _ = cmd.communicate()
         retcode = cmd.poll()
         if retcode != 0:
@@ -302,7 +302,7 @@ class HelpMenu(tk.Menu):  # pylint:disable=too-many-ancestors
         """
         logger.info("Switching branch to '%s'...", branch)
         gitcmd = "git checkout {}".format(branch)
-        cmd = Popen(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
+        cmd = Popen(gitcmd, shell=False, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
         stdout, _ = cmd.communicate()
         retcode = cmd.poll()
         if retcode != 0:
@@ -381,7 +381,7 @@ class HelpMenu(tk.Menu):  # pylint:disable=too-many-ancestors
         update = False
         msg = ""
         gitcmd = "git remote update && git status -uno"
-        cmd = Popen(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
+        cmd = Popen(gitcmd, shell=False, stdout=PIPE, stderr=STDOUT, cwd=_WORKING_DIR)
         stdout, _ = cmd.communicate()
         retcode = cmd.poll()
         if retcode != 0:
@@ -413,7 +413,7 @@ class HelpMenu(tk.Menu):  # pylint:disable=too-many-ancestors
         """ Update Faceswap """
         logger.info("A new version is available. Updating...")
         gitcmd = "git pull"
-        cmd = Popen(gitcmd, shell=True, stdout=PIPE, stderr=STDOUT, bufsize=1, cwd=_WORKING_DIR)
+        cmd = Popen(gitcmd, shell=False, stdout=PIPE, stderr=STDOUT, bufsize=1, cwd=_WORKING_DIR)
         while True:
             output = cmd.stdout.readline().decode(encoding)
             if output == "" and cmd.poll() is not None:
