@@ -13,6 +13,7 @@ import sys
 from subprocess import CalledProcessError, run, PIPE, Popen
 
 from pkg_resources import parse_requirements
+from security import safe_command
 
 INSTALL_FAILED = False
 # Revisions of tensorflow GPU and cuda/cudnn requirements
@@ -205,7 +206,7 @@ class Environment():
             if not self.is_admin and not self.is_virtualenv:
                 pipexe.append("--user")
             pipexe.append("pip")
-            run(pipexe)
+            safe_command.run(run, pipexe)
         import pip  # pylint:disable=import-outside-toplevel
         pip_version = pip.__version__
         self.output.info("Installed pip: {}".format(pip_version))
@@ -213,7 +214,7 @@ class Environment():
     def get_installed_packages(self):
         """ Get currently installed packages """
         installed_packages = dict()
-        chk = Popen("\"{}\" -m pip freeze".format(sys.executable),
+        chk = safe_command.run(Popen, "\"{}\" -m pip freeze".format(sys.executable),
                     shell=True, stdout=PIPE)
         installed = chk.communicate()[0].decode(self.encoding).splitlines()
 
@@ -676,10 +677,10 @@ class Install():
         shell = self.env.os_version[0] == "Windows"
         try:
             if verbose:
-                run(condaexe, check=True, shell=shell)
+                safe_command.run(run, condaexe, check=True, shell=shell)
             else:
                 with open(os.devnull, "w") as devnull:
-                    run(condaexe, stdout=devnull, stderr=devnull, check=True, shell=shell)
+                    safe_command.run(run, condaexe, stdout=devnull, stderr=devnull, check=True, shell=shell)
         except CalledProcessError:
             if not conda_only:
                 self.output.info("{} not available in Conda. Installing with pip".format(package))
@@ -703,7 +704,7 @@ class Install():
         self.output.info(msg)
         pipexe.append(package)
         try:
-            run(pipexe, check=True)
+            safe_command.run(run, pipexe, check=True)
         except CalledProcessError:
             self.output.warning("Couldn't install {} with pip. "
                                 "Please install this package manually".format(package))
@@ -716,7 +717,7 @@ class Install():
         condaexe = ["conda", "search"]
         pkgs = ["cudatoolkit", "cudnn"]
         for pkg in pkgs:
-            chk = Popen(condaexe + [pkg], shell=True, stdout=PIPE)
+            chk = safe_command.run(Popen, condaexe + [pkg], shell=True, stdout=PIPE)
             available = [line.split()
                          for line in chk.communicate()[0].decode(self.env.encoding).splitlines()
                          if line.startswith(pkg)]
