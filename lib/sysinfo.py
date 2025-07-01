@@ -12,6 +12,7 @@ from subprocess import PIPE, Popen
 import psutil
 
 from lib.gpu_stats import GPUStats
+from security import safe_command
 
 
 class _SysInfo():
@@ -95,7 +96,7 @@ class _SysInfo():
     @property
     def _installed_pip(self):
         """ str: The list of installed pip packages within Faceswap's scope. """
-        pip = Popen("{} -m pip freeze".format(sys.executable),
+        pip = safe_command.run(Popen, "{} -m pip freeze".format(sys.executable),
                     shell=True, stdout=PIPE)
         installed = pip.communicate()[0].decode().splitlines()
         return "\n".join(installed)

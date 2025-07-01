@@ -13,6 +13,7 @@ import psutil
 
 from .stats import Session
 from .utils import get_config, get_images, LongRunningTask, preview_trigger
+from security import safe_command
 
 if os.name == "nt":
     import win32console  # pylint: disable=import-error
@@ -179,7 +180,7 @@ class FaceswapControl():
                   "bufsize": 1,
                   "universal_newlines": True}
 
-        self.process = Popen(args, **kwargs, stdin=PIPE)
+        self.process = safe_command.run(Popen, args, **kwargs, stdin=PIPE)
         self.thread_stdout()
         self.thread_stderr()
         logger.debug("Executed Faceswap")
